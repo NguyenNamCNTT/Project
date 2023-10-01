@@ -6,8 +6,8 @@ from PIL import ImageTk, Image
 
 # Tạo một cửa sổ tkinter
 window = tk.Tk()
-window.title("Manhzin")
-window.geometry("1000x1000")
+window.title("Machine Learning")
+window.geometry("1500x1000")
 window.configure(bg='#30D5C8')
 name_label = tk.Label(window, text=f"Phát hiện và đếm số lượng người ", font=("Helvetica", 28), bg='#CCFFCC')
 name_label.pack()
@@ -17,8 +17,8 @@ name_label.pack()
 # Tạo một đối tượng Label để hiển thị khung hình
 image_label = tk.Label(window)
 image_label.pack()
-
-cap = cv2.VideoCapture(0)
+image_path = "Data/img.png"
+cap = cv2.VideoCapture("Data/vid1.mp4")
 
 
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
@@ -36,7 +36,7 @@ def process_frame():
 
     c = 1
 
-    frame = cv2.resize(frame, (1020, 500))
+    frame = cv2.resize(frame, (1000, 500))
     results = model(frame)
 
     for index, row in results.pandas().xyxy[0].iterrows():
@@ -52,6 +52,7 @@ def process_frame():
         c += 1
 
     cv2.putText(frame, f'So nguoi phat hien : {c - 1}', (20, 450), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255, 0, 255), 2)
+    
 
     # Chuyển đổi từ định dạng OpenCV sang PIL Image
     image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
